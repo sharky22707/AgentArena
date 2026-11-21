@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentArena — Reliability Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="brand-mark">A</span><span>agent<span class="brand-light">arena</span><small>RELIABILITY LAB</small></span></a>
+    <div class="workspace"><span class="workspace-dot"></span><span>HackCulture workspace</span><span class="chevron">⌄</span></div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav>
+      <a class="nav-item active" href="#overview" data-view="overview"><span>▦</span> Overview</a>
+      <a class="nav-item" href="#benchmark" data-view="benchmark"><span>◈</span> New benchmark <b class="nav-plus">+</b></a>
+      <a class="nav-item" href="#runs" data-view="runs"><span>◷</span> Run history</a>
+      <a class="nav-item" href="#traces" data-view="traces"><span>⌁</span> Execution traces</a>
+    </nav>
+    <div class="nav-label second">EVALUATION</div>
+    <nav>
+      <a class="nav-item" href="#agents" data-view="agents"><span>⬡</span> Agent configs</a>
+      <a class="nav-item" href="#failure" data-view="failure"><span>⚡</span> Failure lab</a>
+      <a class="nav-item" href="#reports" data-view="reports"><span>▤</span> Reports</a>
+    </nav>
+    <div class="sidebar-bottom"><div class="status-line"><i></i> Simulation engine online</div><div class="user-card"><div class="avatar">AA</div><div><strong>Admin workspace</strong><small>Local demo environment</small></div><span>•••</span></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="breadcrumbs">Workspace <span>/</span> <strong id="crumb">Overview</strong></div><div class="top-actions"><span class="env-pill"><i></i> LOCAL SIMULATION</span><button class="icon-btn" title="Notifications">♧</button><div class="avatar small-avatar">AA</div></div></header>
+    <section class="content">
+      <div class="page-heading">
+        <div><div class="eyebrow">AI AGENT EVALUATION PLATFORM</div><h1 id="page-title">Reliability overview<span class="live-dot"></span></h1><p id="page-subtitle">Measure how agents perform beyond a single successful run.</p></div>
+        <button class="primary-btn" id="newRunBtn">＋ New benchmark</button>
+      </div>
+      <div class="notice"><span>ⓘ</span><div><strong>Demo mode:</strong> Agent A and Agent B are deterministic JavaScript simulators. This frontend demonstrates the benchmark workflow; it does not call real LLMs or external APIs.</div><button id="dismissNotice">×</button></div>
+
+      <section class="view active" id="view-overview">
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top">TOTAL EXPERIMENTS <span class="stat-icon">◷</span></div><div class="stat-value" id="stat-experiments">08</div><div class="stat-foot"><span class="neutral">Local session</span> saved in browser</div></article>
+          <article class="stat-card"><div class="stat-top">AVG. TASK SUCCESS <span class="stat-icon">✓</span></div><div class="stat-value" id="stat-success">83.3<span class="unit">%</span></div><div class="stat-foot"><span class="positive">↑</span> Across evaluated runs</div></article>
+          <article class="stat-card"><div class="stat-top">RECOVERY RATE <span class="stat-icon">↻</span></div><div class="stat-value" id="stat-recovery">66.7<span class="unit">%</span></div><div class="stat-foot">Fault scenarios recovered</div></article>
+          <article class="stat-card"><div class="stat-top">AVG. EXECUTION TIME <span class="stat-icon">⌁</span></div><div class="stat-value" id="stat-time">1.42<span class="unit">s</span></div><div class="stat-foot">Simulated elapsed time</div></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel chart-panel"><div class="panel-head"><div><h2>Reliability snapshot</h2><p>Performance by evaluation dimension</p></div><span class="range-tag">LATEST RUN</span></div><div class="chart-legend"><span><i class="cyan"></i> Agent A</span><span><i class="purple"></i> Agent B</span></div><div class="bar-chart" id="overviewChart"></div></article>
+          <article class="panel"><div class="panel-head"><div><h2>Latest experiment</h2><p>Most recent benchmark result</p></div><span class="status-badge success" id="latestStatus">COMPLETED</span></div><div class="latest-name" id="latestName">Order tracking reliability</div><div class="latest-meta" id="latestMeta">2 agents · 3 repetitions · Normal API</div><div class="latest-score"><div><strong id="latestScore">100%</strong><small>Task success</small></div><div class="score-ring" id="latestRing"><span>✓</span></div></div><button class="text-btn" data-view="runs">View experiment history →</button></article>
+        </div>
+        <div class="panel table-panel"><div class="panel-head"><div><h2>Recent benchmark runs</h2><p>Latest experiments from this browser</p></div><button class="subtle-btn" data-view="runs">View all runs →</button></div><div class="table-wrap"><table><thead><tr><th>EXPERIMENT</th><th>AGENT</th><th>SCENARIO</th><th>SUCCESS</th><th>AVG. TIME</th><th>STATUS</th></tr></thead><tbody id="recentTable"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-benchmark">
+        <div class="benchmark-layout">
+          <div class="panel config-panel">
+            <div class="panel-head"><div><h2>Configure experiment</h2><p>Set the same task and conditions for each agent.</p></div><span class="step-tag">01 / CONFIGURE</span></div>
+            <label class="field-label" for="experimentName">EXPERIMENT NAME</label><input id="experimentName" class="input" value="Order tracking reliability">
+            <label class="field-label" for="taskSelect">BENCHMARK TASK</label><select id="taskSelect" class="input"><option value="order">Track order ORD-1024</option><option value="refund">Check refund status RF-2048</option><option value="inventory">Check inventory for SKU-778</option></select>
+            <div class="field-row"><div><label class="field-label" for="repeatCount">REPEATED RUNS (k)</label><select id="repeatCount" class="input"><option>3</option><option>5</option><option>10</option></select></div><div><label class="field-label" for="promptMode">PROMPT CONDITION</label><select id="promptMode" class="input"><option value="standard">Standard prompt</option><option value="variant">Prompt variation</option></select></div></div>
+            <label class="field-label">AGENTS TO COMPARE</label><div class="agent-select"><label><input type="checkbox" checked disabled><span class="agent-avatar cyan-bg">A</span><span><strong>Agent A</strong><small>Careful retry simulator</small></span><em>ENABLED</em></label><label><input type="checkbox" checked disabled><span class="agent-avatar purple-bg">B</span><span><strong>Agent B</strong><small>Fast response simulator</small></span><em>ENABLED</em></label></div>
+            <label class="field-label">FAILURE SCENARIO</label><div class="scenario-options">
+              <label class="scenario-option selected"><input type="radio" name="fault" value="normal" checked><span class="scenario-symbol">✓</span><span><strong>Normal API</strong><small>No injected fault</small></span></label>
+              <label class="scenario-option"><input type="radio" name="fault" value="timeout"><span class="scenario-symbol">◷</span><span><strong>API timeout</strong><small>First request delayed</small></span></label>
+              <label class="scenario-option"><input type="radio" name="fault" value="429"><span class="scenario-symbol">⚡</span><span><strong>HTTP 429</strong><small>Rate limit response</small></span></label>
+              <label class="scenario-option"><input type="radio" name="fault" value="connection"><span class="scenario-symbol">⌁</span><span><strong>Connection drop</strong><small>Tool temporarily unavailable</small></span></label>
+            </div>
+            <div class="config-foot"><span>◈ Same task, data & fault schedule for both agents</span><button class="primary-btn" id="startBenchmark">▶ Run benchmark</button></div>
+          </div>
+          <aside class="panel run-info"><div class="panel-head"><div><h2>Evaluation protocol</h2><p>What this experiment measures</p></div></div><div class="protocol-item"><span class="protocol-number">01</span><div><strong>Task success</strong><p>Did the agent return the expected result?</p></div></div><div class="protocol-item"><span class="protocol-number">02</span><div><strong>Consistency</strong><p>Successful runs divided by total repetitions.</p></div></div><div class="protocol-item"><span class="protocol-number">03</span><div><strong>Fault tolerance</strong><p>Did the agent recover after the injected fault?</p></div></div><div class="protocol-item"><span class="protocol-number">04</span><div><strong>Efficiency</strong><p>Elapsed time and observable tool-call count.</p></div></div><div class="info-callout">ⓘ Small repetition counts are useful for a demo, not conclusive research evidence.</div></aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-runs"><div class="panel table-panel"><div class="panel-head"><div><h2>Experiment history</h2><p>All benchmark experiments stored in this browser.</p></div><button class="subtle-btn" id="exportCsv">↓ Export CSV</button></div><div class="table-wrap"><table><thead><tr><th>EXPERIMENT</th><th>TASK</th><th>FAULT</th><th>AGENT A</th><th>AGENT B</th><th>DATE</th></tr></thead><tbody id="historyTable"></tbody></table></div><div class="empty-state" id="historyEmpty" hidden>No experiments yet. Start a benchmark to populate this table.</div></div></section>
+      <section class="view" id="view-traces"><div class="panel"><div class="panel-head"><div><h2>Execution trace explorer</h2><p>Observable tool actions, responses, retries and timestamps.</p></div><select id="traceRunSelect" class="input compact-select"></select></div><div id="traceList" class="trace-list"></div></div></section>
+      <section class="view" id="view-agents"><div class="agent-cards"><article class="panel agent-card"><div class="agent-avatar cyan-bg large">A</div><span class="status-badge success">ACTIVE SIMULATOR</span><h2>Agent A</h2><p>Careful retry simulator</p><div class="agent-detail"><span>Strategy</span><strong>Retry with backoff</strong></div><div class="agent-detail"><span>Typical tool calls</span><strong>2–3</strong></div><div class="agent-detail"><span>Simulation profile</span><strong>Reliability-first</strong></div></article><article class="panel agent-card"><div class="agent-avatar purple-bg large">B</div><span class="status-badge success">ACTIVE SIMULATOR</span><h2>Agent B</h2><p>Fast response simulator</p><div class="agent-detail"><span>Strategy</span><strong>Single retry</strong></div><div class="agent-detail"><span>Typical tool calls</span><strong>1–2</strong></div><div class="agent-detail"><span>Simulation profile</span><strong>Speed-first</strong></div></article></div><div class="info-callout wide">These are transparent scripted profiles used to demonstrate the evaluation interface. Connect real agent adapters through a backend before presenting real-world model performance.</div></section>
+      <section class="view" id="view-failure"><div class="failure-grid"><article class="panel"><div class="panel-head"><div><h2>Failure lab</h2><p>Controlled faults available in the MVP.</p></div><span class="status-badge warning">MOCK ENVIRONMENT</span></div><div class="fault-row"><span class="fault-icon">◷</span><div><strong>API timeout</strong><p>Simulates a delayed request on the first attempt.</p></div><span class="fault-code">TIMEOUT</span></div><div class="fault-row"><span class="fault-icon">⚡</span><div><strong>Rate limiting</strong><p>Returns HTTP 429 before allowing a retry.</p></div><span class="fault-code">HTTP 429</span></div><div class="fault-row"><span class="fault-icon">⌁</span><div><strong>Connection drop</strong><p>Simulates a temporary tool connection failure.</p></div><span class="fault-code">NETWORK</span></div></article><article class="panel"><div class="panel-head"><div><h2>Fault injection sequence</h2><p>Example: rate-limit recovery</p></div></div><div class="sequence"><div class="sequence-step"><b>1</b><span>Agent requests order status</span><em>REQUEST</em></div><div class="sequence-step error"><b>2</b><span>Mock API returns HTTP 429</span><em>FAULT</em></div><div class="sequence-step"><b>3</b><span>Agent waits and retries</span><em>RETRY</em></div><div class="sequence-step done"><b>4</b><span>Task recovered or failed</span><em>OUTCOME</em></div></div></article></div></section>
+      <section class="view" id="view-reports"><div class="panel report-panel"><div class="panel-head"><div><h2>Benchmark report</h2><p>Summary of the latest completed experiment.</p></div><button class="subtle-btn" id="reportCsv">↓ Download data</button></div><div id="reportContent"></div></div></section>
+      <footer>AGENTARENA <span>·</span> BENCHMARKING BEYOND TASK SUCCESS <span class="footer-right">LOCAL FRONTEND MVP · 2026</span></footer>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal-backdrop" id="progressModal"><div class="progress-modal"><div class="loader"></div><div class="eyebrow">BENCHMARK ORCHESTRATOR</div><h2 id="progressTitle">Running experiment…</h2><p id="progressText">Preparing isolated test environment.</p><div class="progress-track"><div id="progressBar"></div></div><div class="progress-count" id="progressCount">0 / 6 executions</div></div></div>
+<script src="app.js"></script>
+</body></html>
